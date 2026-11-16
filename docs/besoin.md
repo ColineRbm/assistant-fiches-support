@@ -54,15 +54,6 @@ Ces parcours décrivent l'usage de l'assistant du point de vue du technicien, é
 | 5 | Technicien | Confirme ou refuse. |
 | 6 | Assistant | Enregistre la fiche définitive dans le dossier des fiches et indique son nom. Sinon, il ne modifie rien. |
 
-### Parcours 4 : ouvrir l'assistant
-
-| Étape | Qui | Fait quoi |
-|---|---|---|
-| 1 | Technicien | Ouvre l'assistant. |
-| 2 | Assistant | Affiche un message de bienvenue qui liste les actions disponibles. |
-| 3 | Technicien | Demande une action par une phrase courante. |
-| 4 | Assistant | Lance l'action demandée (consulter, rédiger un brouillon ou valider un brouillon). |
-
 ## User story
 
 ### Parcours 1
@@ -74,13 +65,10 @@ Ces parcours décrivent l'usage de l'assistant du point de vue du technicien, é
 ### Parcours 3
 > US3 — **En tant** que technicien support de Batifact, **je veux** reprendre un brouillon plus tard et le transformer en fiche, **afin** que l'équipe dispose d'une procédure fiable et validée.
 
-### Parcours 4
-> US4 — **En tant** que technicien support de Batifact, **je veux** voir dès l'ouverture de l'assistant les actions que je peux demander, et les demander en langage courant, **afin** de m'en servir pendant un appel sans formation.
-
 ### Tous les parcours
-> US5 — **En tant** que responsable du support, **je veux** que l'assistant ne touche qu'au dossier des fiches et n'écrase jamais une fiche existante sans mon accord, **afin** de garder des procédures fiables.
+> US4 — **En tant** que responsable du support, **je veux** que l'assistant ne touche qu'au dossier des fiches et n'écrase jamais une fiche existante sans mon accord, **afin** de garder des procédures fiables.
 >
-> US5 est transversale : elle s'applique à tous les parcours (confirmation avant remplacement dans les parcours 2 et 3, accès limité au dossier dans tous) et n'a donc pas de parcours propre.
+> US4 est transversale : elle s'applique à tous les parcours (confirmation avant remplacement dans les parcours 2 et 3, accès limité au dossier dans tous) et n'a donc pas de parcours propre.
 
 ## Critères d'acceptation
 
@@ -110,19 +98,12 @@ Ces parcours décrivent l'usage de l'assistant du point de vue du technicien, é
 | CA-10 | Le dossier contient « BR-modifier_le_taux_de_tva.md » et déjà une fiche « modifier_le_taux_de_tva.md » | Le technicien valide ce brouillon | L'assistant demande confirmation avant de remplacer ; tant que le technicien n'a pas confirmé, la fiche n'est pas modifiée | Mail |
 | CA-11 | La confirmation est affichée | Le technicien confirme | La fiche est remplacée par le contenu du brouillon et un message indique son nom | Mail |
 
-### US4 — Connaître les actions disponibles
+### US4 — Protéger les fiches
 
 | N° | Étant donné… | Quand… | Alors… | Origine |
 |---|---|---|---|---|
-| CA-12 | L'assistant vient d'être ouvert | L'interface s'affiche | Un message de bienvenue liste les actions : consulter une fiche, afficher toutes les fiches, rédiger un brouillon, valider un brouillon | Retour de relecture |
-| CA-13 | Le message de bienvenue est affiché | Le technicien écrit « je veux voir la fiche sur la facture non reçue » | L'assistant affiche la réponse et le titre de la fiche « Facture non reçue par le client final », sans commande particulière à taper | Retour de relecture |
-
-### US5 — Protéger les fiches
-
-| N° | Étant donné… | Quand… | Alors… | Origine |
-|---|---|---|---|---|
-| CA-14 | Un fichier existe hors du dossier des fiches | Le technicien demande de le lire ou de le modifier | Un message indique que l'accès est refusé et le fichier n'est ni lu ni modifié | Mail |
-| CA-15 | Le dossier contient la fiche « Facture non reçue par le client final » | Le technicien demande de la supprimer | Un message indique que la suppression n'est pas possible et la fiche est toujours là | Q9 |
+| CA-12 | Un fichier existe hors du dossier des fiches | Le technicien demande de le lire ou de le modifier | Un message indique que l'accès est refusé et le fichier n'est ni lu ni modifié | Mail |
+| CA-13 | Le dossier contient la fiche « Facture non reçue par le client final » | Le technicien demande de la supprimer | Un message indique que la suppression n'est pas possible et la fiche est toujours là | Q9 |
 
 ## Objectifs d’accessibilité
 
