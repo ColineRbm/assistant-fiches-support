@@ -17,13 +17,15 @@
 
 ## Parcours
 
+Ces parcours décrivent l'usage de l'assistant du point de vue du technicien, étape par étape. En se basant sur le fichier `modele-user-story.md`, on distingue les acteurs (3) : le technicien, l'assistant et le service d'IA.
+
 ### Parcours 1 : consulter une fiche
 
 | Étape | Qui | Fait quoi |
 |---|---|---|
 | 1 | Technicien | Écrit des mots-clés en direct pendant l'appel du client. |
 | 2 | Assistant | Cherche, dans le dossier des fiches, la/les fiches qui correspondent. |
-| 3 | Assistant | Envoie la question et le contenu de la/les fiches au service d'IA via LiteLLM. |
+| 3 | Assistant | Envoie la question et le contenu de la/les fiches au service d'IA. |
 | 4 | Service d'IA | Renvoie une réponse construite à partir de la ou des fiches. |
 | 5 | Assistant | Affiche la réponse, puis le titre exact de la ou des fiches sources, en 30 secondes maximum. Si aucune fiche ne correspond, il le dit et propose de créer un brouillon. |
 | 6 | Technicien | Lit ou écoute la réponse et la suit pendant l'appel. |
@@ -32,8 +34,8 @@
 
 | Étape | Qui | Fait quoi |
 |---|---|---|
-| 1 | Technicien | Pour un sujet sans fiche, il crée un brouillon. |
-| 2 | Assistant | Envoie la demande au service d'IA via LiteLLM. |
+| 1 | Technicien | Pour un sujet sans fiche, il demande un brouillon. |
+| 2 | Assistant | Envoie la demande au service d'IA. |
 | 3 | Service d'IA | Renvoie un texte de brouillon. |
 | 4 | Assistant | Affiche le brouillon au technicien. |
 | 5 | Technicien | Relit le brouillon. S'il est satisfait, demande de l'enregistrer. |
@@ -52,6 +54,15 @@
 | 5 | Technicien | Confirme ou refuse. |
 | 6 | Assistant | Enregistre la fiche définitive dans le dossier des fiches et indique son nom. Sinon, il ne modifie rien. |
 
+### Parcours 4 : ouvrir l'assistant
+
+| Étape | Qui | Fait quoi |
+|---|---|---|
+| 1 | Technicien | Ouvre l'assistant. |
+| 2 | Assistant | Affiche un message de bienvenue qui liste les actions disponibles. |
+| 3 | Technicien | Demande une action par une phrase courante. |
+| 4 | Assistant | Lance l'action demandée (consulter, rédiger un brouillon ou valider un brouillon). |
+
 ## User story
 
 ### Parcours 1
@@ -63,6 +74,13 @@
 ### Parcours 3
 > US3 — **En tant** que technicien support de Batifact, **je veux** reprendre un brouillon plus tard et le transformer en fiche, **afin** que l'équipe dispose d'une procédure fiable et validée.
 
+### Parcours 4
+> US4 — **En tant** que technicien support de Batifact, **je veux** voir dès l'ouverture de l'assistant les actions que je peux demander, et les demander en langage courant, **afin** de m'en servir pendant un appel sans formation.
+
+### Tous les parcours
+> US5 — **En tant** que responsable du support, **je veux** que l'assistant ne touche qu'au dossier des fiches et n'écrase jamais une fiche existante sans mon accord, **afin** de garder des procédures fiables.
+>
+> US5 est transversale : elle s'applique à tous les parcours (confirmation avant remplacement dans les parcours 2 et 3, accès limité au dossier dans tous) et n'a donc pas de parcours propre.
 
 ## Critères d'acceptation
 
@@ -92,11 +110,28 @@
 | CA-10 | Le dossier contient « BR-modifier_le_taux_de_tva.md » et déjà une fiche « modifier_le_taux_de_tva.md » | Le technicien valide ce brouillon | L'assistant demande confirmation avant de remplacer ; tant que le technicien n'a pas confirmé, la fiche n'est pas modifiée | Mail |
 | CA-11 | La confirmation est affichée | Le technicien confirme | La fiche est remplacée par le contenu du brouillon et un message indique son nom | Mail |
 
-### Règles d'accès au dossier
+### US4 — Connaître les actions disponibles
 
 | N° | Étant donné… | Quand… | Alors… | Origine |
 |---|---|---|---|---|
-| CA-12 | Un fichier existe hors du dossier des fiches | Le technicien demande de le lire ou de le modifier | Un message indique que l'accès est refusé et le fichier n'est ni lu ni modifié | Mail |
-| CA-13 | Le dossier contient la fiche « Facture non reçue par le client final » | Le technicien demande de la supprimer | Un message indique que la suppression n'est pas possible et la fiche est toujours là | Q9 |
+| CA-12 | L'assistant vient d'être ouvert | L'interface s'affiche | Un message de bienvenue liste les actions : consulter une fiche, afficher toutes les fiches, rédiger un brouillon, valider un brouillon | Retour de relecture |
+| CA-13 | Le message de bienvenue est affiché | Le technicien écrit « je veux voir la fiche sur la facture non reçue » | L'assistant affiche la réponse et le titre de la fiche « Facture non reçue par le client final », sans commande particulière à taper | Retour de relecture |
 
-## Mémo d’accessibilité
+### US5 — Protéger les fiches
+
+| N° | Étant donné… | Quand… | Alors… | Origine |
+|---|---|---|---|---|
+| CA-14 | Un fichier existe hors du dossier des fiches | Le technicien demande de le lire ou de le modifier | Un message indique que l'accès est refusé et le fichier n'est ni lu ni modifié | Mail |
+| CA-15 | Le dossier contient la fiche « Facture non reçue par le client final » | Le technicien demande de la supprimer | Un message indique que la suppression n'est pas possible et la fiche est toujours là | Q9 |
+
+## Objectifs d’accessibilité
+
+Une technicienne aveugle utilise l'assistant avec un lecteur d'écran : elle entend le texte affiché dans le terminal (Q8).
+
+| N° | Objectif | Comment on le constate |
+|---|---|---|
+| 1 | Pas d'animation pendant l'attente (exemple : pas de boucle de chargement). Le message « Recherche en cours » apparaît une seule fois. | Dans la sortie du terminal, ce message apparaît une seule fois par question. |
+| 2 | Les messages sont en texte simple : pas de cadre, de flèche, d'emoji, ni de symbole de mise en forme (étoiles, dièses). | La sortie ne contient aucun de ces caractères. |
+| 3 | Chaque message d'erreur commence par le mot « Erreur ». | Chaque message d'erreur commence par « Erreur ». |
+| 4 | Chaque réponse suit le même ordre : la réponse, puis une ligne « Source : » suivie du titre exact de la fiche. | Chaque réponse contient ces deux parties, dans cet ordre. |
+| 5 | Toutes les actions sont réalisables au clavier seul. | On réalise chaque parcours en entier sans toucher à la souris. |
